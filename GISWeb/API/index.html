@@ -1,0 +1,507 @@
+﻿<html lang="en">
+
+<head>
+    <script type="text/javascript" src="AC_OETags.js" language="javascript"></script>
+    <script type="text/javascript" src="japi/API.js" language="javascript"></script>
+    <script type="text/javascript" src="japi/api-common.js"></script>
+    <script type="text/javascript" src="swfobject.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+</head>
+
+<body style=" height:100%" >
+ <script language="JavaScript" type="text/javascript">
+<!--
+
+     // Major version of Flash required
+     var requiredMajorVersion = 11;
+     // Minor version of Flash required
+     var requiredMinorVersion = 0;
+     // Minor version of Flash required
+     var requiredRevision = 0;
+
+     // Version check for the Flash Player that has the ability to start Player Product Install (6.0r65)
+     var hasProductInstall = DetectFlashVer(6, 0, 65);
+
+     // Version check based upon the values defined in globals
+     var hasRequestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
+
+     if (hasProductInstall && !hasRequestedVersion) {
+         // DO NOT MODIFY THE FOLLOWING FOUR LINES
+         // Location visited after installation is complete if installation is required
+         var MMPlayerType = (isIE == true) ? "ActiveX" : "PlugIn";
+         var MMredirectURL = window.location;
+         document.title = document.title.slice(0, 47) + " - Flash Player Installation";
+         var MMdoctitle = document.title;
+
+         AC_FL_RunContent(
+		"src", "playerProductInstall",
+		"FlashVars", "MMredirectURL=" + MMredirectURL + '&MMplayerType=' + MMPlayerType + '&MMdoctitle=' + MMdoctitle + "",
+		"width", "100%",
+		"height", "98%",
+		"align", "middle",
+		"id", "japi",
+		"quality", "high",
+		"bgcolor", "#888888",
+		"name", "viewer_api",
+		"allowScriptAccess", "sameDomain",
+		"type", "application/x-shockwave-flash",
+		"pluginspage", "http://www.adobe.com/go/getflashplayer"
+	);
+     } else if (hasRequestedVersion) {
+
+         var HREF = window.location.href.replace("?", "&").toLowerCase();
+
+         // if we've detected an acceptable version
+         // embed the Flash Content SWF when all tests are passed
+         AC_FL_RunContent(
+			"src", "http://globespotter.cyclomedia.com/v31/api/viewer_api.swf",    ///* tp://globespotter.aryamap.com/2.8.5/api/viewer_api.swf   tp://globespotter.cyclomedia.com/v31/api/viewer_api.swf *\
+			"width", "100%",
+		   "height", "98%",
+			"align", "middle",
+			"id", "japi",
+			"quality", "high",
+			"bgcolor", "#888888",
+			"name", "viewer_api",
+			"allowScriptAccess", "always",
+			"type", "application/x-shockwave-flash",
+			"pluginspage", "http://www.adobe.com/go/getflashplayer",
+			"allowFullScreen", "true"
+	);
+
+     } else {  // flash is too old or we can't detect the plugin
+         var alternateContent = 'Alternate HTML content should be placed here. '
+  	+ 'This content requires the Adobe Flash Player. '
+   	+ '<a href=http://www.adobe.com/go/getflash/>Get Flash</a>';
+         document.write(alternateContent);  // insert non-flash content
+     }
+// -->
+    </script>
+    <script language='JavaScript' type="text/javascript">
+<!--
+
+var start_x;
+var start_y;
+var openmode = 0;
+var imagecount;
+var api;
+function hst_apiReady(readyState)
+{
+
+  //alert("API is ready for use.");
+	  start();
+      showParams();
+	  openNearestImage(getURL());
+}
+
+
+function apiReady()
+ {
+    api = document.getElementById("japi");
+   
+    var ready = api && api.getAPIReadyState();
+
+    if (!ready) {
+        alert("API not ready.");
+    }
+
+    return ready;
+}
+function openNearestImage(value) {
+    if (apiReady()) {
+        var query = value; //-43.941351 ,-19.936730
+        var maxLocations = 1;
+
+        if (!query || query == "") {
+            alert("aInvalid input.");
+        }
+        else {
+            try {
+                api.openNearestImage(query, maxLocations);
+            }
+            catch (error) {
+                alert("Error while opening an image: " + error);
+            }
+        }
+    }
+}
+
+function openImage(value) {
+    if (apiReady()) {
+        var query = value;
+
+        if (!query || query == "") {
+            alert("Invalid input.");
+        }
+        else {
+            var viewerParams = new ViewerParameters(30, 10.0, 100.0);
+
+            try {
+
+                //api.setCloseViewerEnabled(true);
+                api.setActiveViewerReplaceMode(true); // parametro para abrir a cyclorama na mesma viewer
+                //api.setViewerToolBarVisible(true);
+                //api.setViewerTitleBarVisible(true);
+                api.openImage(query, viewerParams);
+      
+            }
+            catch (error) {
+                alert("Error while opening an image: " + error);
+            }
+        }
+    }
+}
+function getURL()
+{
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+	   var latlng;
+	  
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == "latlng")
+			   {
+					latlng= pair[1];
+			   }
+			  
+       }
+       return latlng;
+}
+
+
+function gup( name )
+{  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+	var regexS = "[\\?&]"+name+"=([^&#]*)";
+	var regex = new RegExp( regexS );
+	var results = regex.exec( window.location.href );
+	if( results == null )    return "";
+		else
+	return results[1];}
+
+
+
+
+function showParams()
+		{
+
+
+var tcm = gup( 'tcm' );
+if (tcm == 0 )
+{
+	document.getElementById("japi").setViewerRotationButtonsVisible(false);
+}
+else
+	{
+	document.getElementById("japi").setViewerRotationButtonsVisible(true);
+
+	}
+
+var detailbeeld = gup( 'detail' );
+if (detailbeeld == 0 )
+{
+	document.getElementById("japi").setViewerDetailImagesVisible(true);
+	//alert (detailbeeld);
+}
+else
+	{
+	document.getElementById("japi").setViewerDetailImagesVisible(true);
+	}
+
+
+var nav = gup( 'nav' );
+if (nav == 0 )
+{
+		document.getElementById("japi").setRecordingLocationsVisible(true);
+	//alert (nav);
+}
+else
+	{
+	document.getElementById("japi").setRecordingLocationsVisible(true);
+	//alert (nav);
+		}
+
+var addressloc = gup( 'addressloc' );
+if (addressloc == 0 )
+{
+	document.getElementById("japi").setAddressLocationsVisible(false);
+}
+else
+	{
+	document.getElementById("japi").setAddressLocationsVisible(true);
+	}
+
+var compass = gup( 'compass' );
+if (compass == 0 )
+{
+	document.getElementById("japi").setViewerCompassVisible(false);
+		document.getElementById("japi").setMapCompassVisible(false);
+}
+else
+	{
+	document.getElementById("japi").setViewerCompassVisible(true);
+	document.getElementById("japi").setMapCompassVisible(true);
+	}
+// Função para configurar a barra de ferramentas na janela do viewer e do mapa
+var toolbar = gup( 'toolbar' );
+if (toolbar == 0 )
+{
+	document.getElementById("japi").setViewerOverlayDrawDistanceEnabled(true);
+		document.getElementById("japi").setViewerOverlayAlphaEnabled(true);
+	document.getElementById("japi").setImageInformationEnabled(true);
+	document.getElementById("japi").setViewerToolBarVisible(true);
+	document.getElementById("japi").setViewerBrightnessEnabled(true);
+	document.getElementById("japi").setViewerCycleZoomLevelsEnabled(true);
+	document.getElementById("japi").setViewerPrintImageEnabled(true);
+  document.getElementById("japi").setViewerSaveImageEnabled(true);
+  document.getElementById("japi").setMapSaveImageEnabled(true);
+	document.getElementById("japi").setMapPrintImageEnabled(true);
+  document.getElementById("japi").setMapToolBarVisible(true);
+  document.getElementById("japi").setMapToolBarButtonsVisible(true);
+  document.getElementById("japi").setMapCycleZoomLevelsEnabled(true);
+  document.getElementById("japi").setMapRotationEnabled(true);
+
+
+      }
+else
+	{
+	document.getElementById("japi").setViewerOverlayDrawDistanceEnabled(true);
+	document.getElementById("japi").setViewerOverlayAlphaEnabled(true);
+	document.getElementById("japi").setImageInformationEnabled(true);
+	document.getElementById("japi").setViewerToolBarVisible(true);
+	document.getElementById("japi").setViewerBrightnessEnabled(true);
+	document.getElementById("japi").setViewerCycleZoomLevelsEnabled(true);
+	document.getElementById("japi").setViewerPrintImageEnabled(true);
+  document.getElementById("japi").setViewerSaveImageEnabled(true);
+  document.getElementById("japi").setMapSaveImageEnabled(true);
+	document.getElementById("japi").setMapPrintImageEnabled(true);
+  document.getElementById("japi").setMapToolBarVisible(true);
+  document.getElementById("japi").setMapToolBarButtonsVisible(true);
+  document.getElementById("japi").setMapCycleZoomLevelsEnabled(true);
+  document.getElementById("japi").setMapRotationEnabled(true);
+
+
+	}
+
+
+
+}
+
+
+
+
+
+
+
+
+function hst_viewLoaded()
+{
+//alert ("preview");
+}
+
+
+
+
+function hst_componentReady()
+{
+//alert("component ready" );
+    try
+    {
+        document.getElementById("japi").setSRSNameViewer("EPSG:4326");
+        document.getElementById("japi").setSRSNameAddress("EPSG:4326");
+        
+		document.getElementById("japi").setAddressLanguageCode("br");
+	//	document.getElementById("japi").setAddressDatabase("CMDatabase");
+		document.getElementById("japi").setAPIKey("SnUhCDkd2L4F6jQtu3olyrYJGzAtGnkpCjMdiv0dyLcl-3Ix2DgZeXQF6_w5KLEZ");
+        document.getElementById("japi").setUserNamePassword("pedro.rezende", "rezende@5826934710");
+ 	document.getElementById("japi").setServiceURL("http://atlas.cyclomedia.com",256);
+
+    }
+    catch(Error) // Its A String ...
+    {
+        alert("Component Ready Error: " + Error);
+    }
+}
+
+function ViewerParameters(yaw, pitch, hFov, dateFrom, dateTo)
+{
+	this.yaw = yaw;
+	this.pitch = pitch;
+	this.hfov = hFov;
+	this.datefrom = dateFrom;
+		this.dateto = dateTo;
+}
+
+function hst_mapInitialized()
+{
+
+
+
+		// perform any pending searches
+		switch (openmode)
+		{
+			case 3:
+			        var coord = (start_x + ' '+ start_y);
+				    document.getElementById("japi").openNearestImage(coord , imagecount);//, -1);
+					break;
+		}
+
+        document.getElementById("japi").zoomMapToFeatureLevel();
+
+        // enable oblique mode
+        document.getElementById("japi").setObliqueModeEnabled(true);
+		document.getElementById("japi").setDividerDrag(true);
+		document.getElementById("japi").setDividerPosition(0.50);
+		document.getElementById("japi").setShowMap(true);
+}
+
+
+function Extent
+(
+	xmin,
+	ymin,
+	xmax,
+	ymax
+)
+{
+	this.xmin = xmin;
+	this.ymin = ymin;
+	this.xmax = xmax;
+	this.ymax = ymax;
+}
+function OSM
+(
+	url,
+	maxExtent,
+	maxResolution,
+	maxZoomLevel,
+	featureZoomLevel
+)
+{
+	this.url = url;
+	this.maxExtent = maxExtent;
+	this.maxResolution = maxResolution;
+	this.maxZoomLevel = maxZoomLevel;
+	this.featureZoomLevel = featureZoomLevel;
+
+}
+
+
+
+function start()
+{
+  //bepaal openmode
+
+
+  var obliek =  gup( 'obliek' );
+  var address =  gup( 'address' );
+  var imgID =  gup( 'imageid' );
+  var posx =  gup( 'posx' );
+  if (imgID > " ")
+					{
+					openmode = (1);
+					}
+else if (address > " ")
+					{
+					openmode = (2);
+				}
+
+else if (posx > 0)
+					{
+				openmode = (3);
+					}
+
+
+var jaar = gup( 'year' );
+  if (jaar > 0)
+		{
+			jaarbegin =( jaar + "-01-01");
+			jaareind = (jaar + "-12-31");
+	        document.getElementById("japi").setUseDateRange(true);
+		    document.getElementById("japi").setDateFrom(jaarbegin);
+	        document.getElementById("japi").setDateTo(jaareind);
+		    var viewerParams = new ViewerParameters(0, 0.0, 90.0);
+          }
+
+//bepaal aantal te openen cyclorama's
+
+	var cyc = gup( 'cyclo' );
+	//alert (cyc);
+	imagecount =1
+	if ( !cyc)
+	{
+	 imagecount= 1;
+	}
+	else
+	{
+	imagecount = cyc
+	}
+
+
+switch (openmode)
+{
+case 1:
+
+		document.getElementById("japi").openImage(imgID, viewerParams);//, -1);
+
+    	break;
+case 2:
+
+		address = decodeURI(address);
+
+		document.getElementById("japi").openNearestImage(address,imagecount);//, -1);
+
+		break;
+case 3:
+	    start_x =  gup( 'posx' );
+	    start_y =  gup( 'posy' );
+
+	    if( obliek == 0 )
+	    {
+	        var coord = (start_x + ' '+  start_y);
+	//alert (coord);
+	        document.getElementById("japi").openNearestImage(coord , imagecount);//, -1);
+	    }
+	    else
+		{
+			// wait until map is ready
+		}
+		break;
+}
+
+	if (obliek > 0 )
+	{
+
+		var extent = new Extent(-23500, 289000, 316500, 629000);
+        var osm = new OSM
+            (
+                "https://atlas.cyclomedia.com/openstreetmap/",
+                extent,
+                1328.125,
+                12,
+                11
+              );
+
+                 document.getElementById("japi").setBaseLayer ("OSM", 3, "EPSG:28992", osm);
+                 document.getElementById("japi").setMapEnabled(true);
+				 //document.getElementById("japi").setMapCenter( 202995, 503658 );
+
+
+	}
+
+}
+
+
+
+
+
+// -->
+    </script>
+
+
+
+   
+
+
+    
+
+</body>
+</html>

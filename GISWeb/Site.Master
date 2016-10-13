@@ -1,0 +1,21 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="GISWeb.Site" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Leaflet</title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    
+    <asp:ContentPlaceHolder ID="body" runat="server">
+
+            <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true"/>
+           
+            
+            
+        </asp:ContentPlaceHolder>
+</body>
+</html>

@@ -74,7 +74,7 @@
         var map = L.map('map', {
             layers: esri,
            
-        }).setView([-19.8977, -43.9477], 12);
+        }).setView([-19.0000, -43.0000], 8);
 
 
         getPontos("TESTE");

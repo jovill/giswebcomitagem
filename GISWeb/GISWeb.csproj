@@ -19,6 +19,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -78,6 +79,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Site.Master" />
     <Content Include="src\Leaflet.app.js" />
+    <Content Include="Scripts\olx_3737.pdf" />
+    <Content Include="Scripts\pud_6611.pdf" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
